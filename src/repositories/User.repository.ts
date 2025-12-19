@@ -1,4 +1,5 @@
-import pool from "../configs/databse.config"
+import { Query, QueryResult } from "pg"
+import pool from "../configs/database.config"
 import { User } from "../models/User.model"
 
 export class UserRepository {
@@ -13,12 +14,17 @@ export class UserRepository {
     }
 
     async FindAllUsers():Promise<User[]>{
-        const result =  await pool.query(`SELECT * FROM users ORDER BY id ASC`)
+        const result:QueryResult<User> =  await pool.query(`SELECT * FROM users ORDER BY id ASC`)
         return result.rows
     }
 
+    async FindUserByEmail(email: string):Promise<User | null>{
+        const result: QueryResult<User> = await pool.query(`SELECT * FROM users WHERE email = $1`, [email])
+        return result.rows[0] || null
+    }
+
     async FindUserById(id:number):Promise<User | null>{
-        const result = await pool.query(`SELECT * FROM users WHERE id = $1`, [id])
+        const result: QueryResult<User> = await pool.query(`SELECT * FROM users WHERE id = $1`, [id])
         return result.rows[0] || null
     }
 
@@ -26,7 +32,7 @@ export class UserRepository {
         const existingUser = await this.FindUserById(id)
         if(!existingUser) return null   
         const updatedUser = {...existingUser, ...user}
-        const result = await pool.query(
+        const result: QueryResult<User> = await pool.query(
             `UPDATE users SET email=$1, password=$2, role=$3, address=$4, phone=$5, hub=$6 WHERE id=$7 RETURNING *`,
             [updatedUser.email, updatedUser.password, updatedUser.role, updatedUser.address, updatedUser.phone, updatedUser.hub, id]
         )
@@ -34,7 +40,7 @@ export class UserRepository {
     }
 
     async DeleteUser(id:number):Promise<boolean>{
-        const result = await pool.query(`DELETE FROM users WHERE id=$1`, [id])
-        return result.rowCount > 0
+        const result: QueryResult<User> = await pool.query(`DELETE FROM users WHERE id=$1`, [id])
+        return (result.rowCount ?? 0) > 0
     }
 }
