@@ -9,3 +9,12 @@ import { logger } from "../utils/Logger.util"
 //     email?: string,
 //     manager?: string,
 //     created_at?: Date
+
+export const CreateTableHub = async () =>{
+    const query = `
+        CREATE TABLE IF NOT EXISTS hubs (
+            
+        
+        )
+    `
+}
