@@ -66,6 +66,32 @@ const UserController = {
                 error: (error as Error).message
             })
         }
+    },
+    DeleteUser: async(req: Request, res: Response): Promise<void> =>{
+        try{
+            const userID = parseInt(req.params.id)
+            const isdeleted = await UserService.DeleteUserServices(userID)
+            if(!isdeleted){
+                res.status(404).json({
+                    success: false,
+                    code: 'USR_05', 
+                    message: "User not found"
+                })
+                return  
+            }
+            res.status(200).json({
+                success: true,
+                message: "User deleted successfully"
+            })
+        }catch(error: any){
+            logger.error(`Error Deleting user: ${(error as Error).message}`)
+            res.status(500).json({
+                success: false,
+                code: 'USR_04',
+                message: "Error Deleting User",
+                error: (error as Error).message
+            })
+        }
     }
 }
 

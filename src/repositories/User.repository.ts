@@ -1,4 +1,4 @@
-import { Query, QueryResult } from "pg"
+import { QueryResult } from "pg"
 import pool from "../configs/database.config"
 import { User } from "../models/User.model"
 

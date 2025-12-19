@@ -37,6 +37,14 @@ const UserService = {
         }catch(error){
             throw new Error('Error updating user:' + (error as Error).message)
         }
+    },
+    DeleteUserServices: async(userId: number)=>{
+        try{
+            const isDeleted = await UserRepository.prototype.DeleteUser(userId)
+            return isDeleted
+        }catch(error){
+            throw new Error("Error deleteing user:" + (error as Error).message)
+        }
     }
     
 }

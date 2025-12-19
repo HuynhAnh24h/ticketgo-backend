@@ -1,4 +1,4 @@
-import pool from "../configs/databse.config"
+import pool from "../configs/database.config"
 import { logger } from "../utils/Logger.util"
 
 export const CreateUserTable = async () =>{
